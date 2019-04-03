@@ -1,9 +1,10 @@
 import peasy.*;
 PeasyCam cam;
 
-char[] moves = {'u', 'U', 'd', 'D', 'f', 'F', 'b', 'B', 'l', 'L', 'r', 'R'};
+Move[] allMoves = new Move[12];
 
 boolean shuffle = false;
+boolean unshuffle = false;
 
 final int U = 0;
 final int D = 1;
@@ -11,6 +12,7 @@ final int R = 2;
 final int L = 3;
 final int F = 4;
 final int B = 5;
+
 final boolean CLOCKWISE = true;
 final boolean COUNTER_CLOCKWISE = false;
 
@@ -20,8 +22,13 @@ color[] colors = {#FFFF00, #FFFFFF, #FFA500, #FF0000, #00FF00, #0000FF, #000000}
 int dim = 3;
 Cubie[][][] cube = new Cubie[dim][dim][dim];
 
+ArrayList<Move> sequence = new ArrayList<Move>();
+
+Move currentMove = new Move('f', 1, -1, -1, 2);
+
 void setup() {
   size(600, 600, P3D);
+  initMoves();
   cam = new PeasyCam(this, 400);
   for (int i = 0; i < dim; i++) {
     for (int j = 0; j < dim; j++) {
@@ -41,15 +48,23 @@ void setup() {
 }
 
 void keyPressed() {
-  move(key);
+  //move(key);
   if (key == ' ') {
     shuffle = true;
+    unshuffle = false;
+  }
+  if (key == '\\') {
+    shuffle = false;
+    unshuffle = true;
   }
 }
 
 void keyReleased() {
   if (key == ' ') {
     shuffle = false;
+  }
+  if (key == '\\') {
+    unshuffle = false;
   }
 }
 
@@ -59,16 +74,44 @@ void draw() {
   rotateY(0.35);
   //rotateZ(0.1);
   
-  if (shuffle && frameCount % 10 == 0) {
-    int r = int(random(moves.length));
-    move(moves[r]);
-    println(moves[r]);
+  if (frameCount % 10 == 0) {
+    if (shuffle && !unshuffle && !currentMove.animating) {
+      int r = int(random(allMoves.length));
+      Move m = allMoves[r];
+      currentMove = m;
+      currentMove.start();
+      sequence.add(m);
+      println(m.which, m.dir);
+    } else if (unshuffle && !shuffle && !currentMove.animating) {
+      if (!sequence.isEmpty()) {
+        Move m = sequence.remove(sequence.size() - 1);
+        Move nextMove = m.reverse();
+        currentMove = nextMove;
+        currentMove.start();
+        println(nextMove.which, nextMove.dir);
+      }
+    }
   }
+  
+  currentMove.update();
   
   for (int i = 0; i < dim; i++) {
     for (int j = 0; j < dim; j++) {
       for (int k = 0; k < dim; k++) {
-        cube[i][j][k].show();
+        if (currentMove.animating) {
+          push();
+          if (currentMove.k != -1 && k == currentMove.k) {
+            rotateZ(currentMove.angle);
+          } else if (currentMove.j != -1 && j == currentMove.j) {
+            rotateY(currentMove.angle);
+          } else if (currentMove.i != -1 && i == currentMove.i) {
+            rotateX(currentMove.angle);
+          }
+          cube[i][j][k].show();
+          pop();
+        } else {
+          cube[i][j][k].show();
+        }
       }
     }
   }

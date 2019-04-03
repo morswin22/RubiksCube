@@ -58,46 +58,31 @@ void turnX(int index, boolean clockwise) {
   }
 }
 
-void move(char key) {
-  switch(key) {
-    case 'f':
-      turnZ(2,CLOCKWISE);
-      break;
-    case 'F':
-      turnZ(2,COUNTER_CLOCKWISE);
-      break;
-    case 'b':
-      turnZ(0,COUNTER_CLOCKWISE);
-      break;
-    case 'B':
-      turnZ(0,CLOCKWISE);
-      break;
-      
-    case 'l':
-      turnX(0,COUNTER_CLOCKWISE);
-      break;
-    case 'L':
-      turnX(0,CLOCKWISE);
-      break;
-    case 'r':
-      turnX(2,CLOCKWISE);
-      break;
-    case 'R':
-      turnX(2,COUNTER_CLOCKWISE);
-      break;
-      
-    case 'u':
-      turnY(0,CLOCKWISE);
-      break;
-    case 'U':
-      turnY(0,COUNTER_CLOCKWISE);
-      break;
-    case 'd':
-      turnY(2,COUNTER_CLOCKWISE);
-      break;
-    case 'D':
-      turnY(2,CLOCKWISE);
-      break;
+void move(char which, int dir) {
+  if (which == 'u' && dir == 1) {
+    turnY(0,CLOCKWISE);
+  } else if (which == 'u' && dir == -1) {
+    turnY(0,COUNTER_CLOCKWISE);
+  } else if (which == 'd' && dir == 1) {
+    turnY(2,COUNTER_CLOCKWISE);
+  } else if (which == 'd' && dir == -1) {
+    turnY(2,CLOCKWISE);
+  } else if (which == 'r' && dir == 1) {
+    turnX(2,CLOCKWISE);
+  } else if (which == 'r' && dir == -1) {
+    turnX(2,COUNTER_CLOCKWISE);
+  } else if (which == 'l' && dir == 1) {
+    turnX(0,COUNTER_CLOCKWISE);
+  } else if (which == 'l' && dir == -1) {
+    turnX(0,CLOCKWISE);
+  } else if (which == 'f' && dir == 1) {
+    turnZ(2,CLOCKWISE);
+  } else if (which == 'f' && dir == -1) {
+    turnZ(2,COUNTER_CLOCKWISE);
+  } else if (which == 'b' && dir == 1) {
+    turnZ(0,COUNTER_CLOCKWISE);
+  } else if (which == 'b' && dir == -1) {
+    turnZ(0,CLOCKWISE);
   }
 }
 
