@@ -1,10 +1,18 @@
-class Box {
+class Cubie {
   PVector pos;
   float len;
   
-  Box(float x, float y, float z, float len_) {
+  Config config;
+  
+  Cubie(float x, float y, float z, float len_) {
     pos = new PVector(x,y,z);
     len = len_;
+    
+    config = new Config();
+  }
+  
+  void highlight() {
+    config = new Config(new int[] {6,6,6,6,6,6});
   }
   
   void show() {
@@ -17,38 +25,38 @@ class Box {
     beginShape(QUADS);
     float r = len / 2;
     
-    fill(colors[BCK]);
-    vertex(-r,-r,-r); //z
+    fill(colors[config.get(U)]);
+    vertex(-r,-r,-r); // y
     vertex(r,-r,-r);
-    vertex(r,r,-r);
+    vertex(r,-r,r);
+    vertex(-r,-r,r);
+    fill(colors[config.get(D)]);
     vertex(-r,r,-r);
-    fill(colors[FRT]);
-    vertex(-r,-r, r);
+    vertex(r,r,-r);
+    vertex(r,r,r);
+    vertex(-r,r,r);
+    
+    fill(colors[config.get(R)]);
+    vertex(r,-r,-r); //x
+    vertex(r,r,-r);
+    vertex(r,r,r);
+    vertex(r,-r,r);
+    fill(colors[config.get(L)]);
+    vertex(-r,-r,-r);
+    vertex(-r,r,-r);
+    vertex(-r,r,r);
+    vertex(-r,-r,r);
+    
+    fill(colors[config.get(F)]);
+    vertex(-r,-r, r); //z
     vertex(r,-r, r);
     vertex(r,r,r);
     vertex(-r,r,r);
-    
-    fill(colors[LFT]);
-    vertex(-r,-r,-r); //y
-    vertex(-r,r,-r);
-    vertex(-r,r,r);
-    vertex(-r,-r,r);
-    fill(colors[RGT]);
+    fill(colors[config.get(B)]);
+    vertex(-r,-r,-r); 
     vertex(r,-r,-r);
     vertex(r,r,-r);
-    vertex(r,r,r);
-    vertex(r,-r,r);
-    
-    fill(colors[UPP]);
-    vertex(-r,-r,-r); //x
-    vertex(r,-r,-r);
-    vertex(r,-r,r);
-    vertex(-r,-r,r);
-    fill(colors[DWN]);
     vertex(-r,r,-r);
-    vertex(r,r,-r);
-    vertex(r,r,r);
-    vertex(-r,r,r);
     endShape();
  
     popMatrix();
