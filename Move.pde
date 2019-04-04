@@ -11,6 +11,17 @@ void initMoves() {
   allMoves[9] = new Move('f', -1, -1, -1, 2);
   allMoves[10] = new Move('b', 1, -1, -1, 0);
   allMoves[11] = new Move('b', -1, -1, -1, 0);
+  
+  
+  for(int i = 0; i<allMoves.length; i++) {
+    char ki = allMoves[i].which;
+    if (allMoves[i].dir == -1) {
+      ki = Character.toUpperCase(ki);
+    }
+    keys[i] = ki;
+  }
+  
+  println(keys);
 }
 
 class Move {
@@ -21,11 +32,7 @@ class Move {
   int i, j, k;
   
   void start() {
-    if (dir > 0) {
-      angle = HALF_PI;
-    } else {
-      angle = 0;
-    }
+    angle = 0;
     animating = true;
   }
   
@@ -35,13 +42,15 @@ class Move {
   
   void update() {
     if (animating) {
-      angle -= 0.05*dir;
-      if (dir > 0) {
-        if (angle <= 0) {
+      angle += 0.05*dir;
+      if (dir < 0) {
+        println("Added "+(0.05*dir)+" so its "+angle+" and is it lesser than "+(-HALF_PI));
+        if (angle <= -HALF_PI) {
           animating = false;
           execute();
         }
       } else {
+        println("Added "+(0.05*dir)+" so its "+angle+" and is it greater than "+HALF_PI);
         if (angle >= HALF_PI) {
           animating = false;
           execute();

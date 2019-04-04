@@ -2,6 +2,7 @@ import peasy.*;
 PeasyCam cam;
 
 Move[] allMoves = new Move[12];
+char[] keys = new char[12];
 
 boolean shuffle = false;
 boolean unshuffle = false;
@@ -48,6 +49,12 @@ void setup() {
 }
 
 void keyPressed() {
+  for(int i = 0; i<keys.length; i++) {
+    if (!currentMove.animating && keys[i] == key) {
+      currentMove = allMoves[i];
+      currentMove.start();
+    }
+  }
   //move(key);
   if (key == ' ') {
     shuffle = true;

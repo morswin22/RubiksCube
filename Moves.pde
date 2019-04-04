@@ -80,9 +80,9 @@ void move(char which, int dir) {
   } else if (which == 'f' && dir == -1) {
     turnZ(2,COUNTER_CLOCKWISE);
   } else if (which == 'b' && dir == 1) {
-    turnZ(0,COUNTER_CLOCKWISE);
-  } else if (which == 'b' && dir == -1) {
     turnZ(0,CLOCKWISE);
+  } else if (which == 'b' && dir == -1) {
+    turnZ(0,COUNTER_CLOCKWISE);
   }
 }
 
