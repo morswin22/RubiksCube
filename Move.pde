@@ -1,73 +1,52 @@
-void initMoves() {
-  allMoves[0] = new Move('u', 1, -1, 0, -1);
-  allMoves[1] = new Move('u', -1, -1, 0, -1);
-  allMoves[2] = new Move('d', 1, -1, 2, -1);
-  allMoves[3] = new Move('d', -1, -1, 2, -1);
-  allMoves[4] = new Move('r', 1, 2, -1, -1);
-  allMoves[5] = new Move('r', -1, 2, -1, -1);
-  allMoves[6] = new Move('l', 1, 0, -1, -1);
-  allMoves[7] = new Move('l', -1, 0, -1, -1);
-  allMoves[8] = new Move('f', 1, -1, -1, 2);
-  allMoves[9] = new Move('f', -1, -1, -1, 2);
-  allMoves[10] = new Move('b', 1, -1, -1, 0);
-  allMoves[11] = new Move('b', -1, -1, -1, 0);
+class Move {
+  float angle = 0;
+  int x = 0;
+  int y = 0;
+  int z = 0;
+  int dir;
+  boolean animating = false;
+  boolean finished = false;
   
-  
-  for(int i = 0; i<allMoves.length; i++) {
-    char ki = allMoves[i].which;
-    if (allMoves[i].dir == -1) {
-      ki = Character.toUpperCase(ki);
-    }
-    keys[i] = ki;
+  Move(int x, int y, int z, int dir) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.dir = dir;
   }
   
-  println(keys);
-}
-
-class Move {
-  char which;
-  int dir = 1;
-  float angle = 0;
-  boolean animating = false;
-  int i, j, k;
+  boolean finished() {
+    return finished;
+  }
+  
+  Move copy() {
+    return new Move(x,y,z,dir);
+  }
+  
+  void reverse() {
+    dir *= -1;
+  }
   
   void start() {
-    angle = 0;
     animating = true;
-  }
-  
-  void execute() {
-    move(which, dir);
+    finished = false;
+    angle = 0;
   }
   
   void update() {
     if (animating) {
-      angle += 0.05*dir;
-      if (dir < 0) {
-        println("Added "+(0.05*dir)+" so its "+angle+" and is it lesser than "+(-HALF_PI));
-        if (angle <= -HALF_PI) {
-          animating = false;
-          execute();
-        }
-      } else {
-        println("Added "+(0.05*dir)+" so its "+angle+" and is it greater than "+HALF_PI);
-        if (angle >= HALF_PI) {
-          animating = false;
-          execute();
-        }
+      angle += dir * speed;
+      if (abs(angle) > HALF_PI) {
+        angle = 0;
+        animating = false;
+        finished = true;
+        if (abs(z)>0) {
+          turnZ(z, dir);
+        } else if (abs(x)>0) {
+          turnX(x, dir);
+        } else if (abs(y)>0) {
+          turnY(y, dir);
+        }   
       }
     }
-  }
-  
-  Move(char c, int dir_, int i_, int j_, int k_) {
-    which = c;
-    dir = dir_;
-    i = i_;
-    j = j_;
-    k = k_;
-  }
-  
-  Move reverse() {
-    return new Move(which, dir * -1, i, j, k);
   }
 }
